@@ -62,49 +62,100 @@ bikes_df.head()
 orderlines_df
 
 # %%
-bikes_df
+freq_count_series = bikes_df['description'].value_counts()
+freq_count_series.nlargest(5)
+
+top5_bikes_series = bikes_df['description'].value_counts().nlargest(5)
+
+fig = top5_bikes_series.plot(kind = "barh")
+fig.invert_yaxis()
+plt.show()
 
 # %%
 
 
 # 4.0 Joining Data ----
-
+bike_orderlines_joined_df = orderlines_df \
+    .drop(columns='Unnamed: 0', axis=1) \
+    .merge(
+        right = bikes_df,
+        how = 'left',
+        left_on='product.id',
+        right_on='bike.id'
+    ) \
+    .merge(
+        right=bikeshops_df,
+        how='left',
+        left_on='customer.id',
+        right_on='bikeshop.id'
+    )
 
 
 # 5.0 Wrangling Data ----
 
 # * No copy
-
+df = bike_orderlines_joined_df
 
 # * Copy
-
-
+df2 = bike_orderlines_joined_df.copy()
 
 # * Handle Dates
-
+df['order.date'] = pd.to_datetime(df['order.date'])
 
 # * Show Effect: Copy vs No Copy
-
+bike_orderlines_joined_df.info()
 
 # * Text Columns
-
+df.T
 
 # * Splitting Description into category_1, category_2, and frame_material
+temp_df = df['description'].str.split(pat=' - ', expand=True)
 
+df['category.1'] = temp_df[0]
+df['category.2'] = temp_df[1]
+df['frame.material'] = temp_df[2]
 
 
 # * Splitting Location into City and State
-
-
+temp_df = df['location'].str.split(pat=', ', expand=True)
+df['city'] = temp_df[0]
+df['state'] = temp_df[1]
 # * Price Extended
+df['total.price'] = df['quantity'] * df['price']
 
+df.sort_values('total.price', ascending=False)
 
 # * Reorganizing
+df.columns
+cols_to_keep_list = [
+    'order.id', 
+'order.line', 
+'order.date', 
+#  'customer.id', 
+#  'product.id',
+# 'bike.id', 
+'model', 
+# 'description',
+'quantity',  
+'price', 
+'total.price', 
+# 'bikeshop.id',
+'bikeshop.name', 
+# 'location', 
+'category.1', 
+'category.2',
+'frame.material', 
+'city', 
+'state']
 
+df = df[cols_to_keep_list]
 
 # * Renaming columns
+df.columns = df.columns.str.replace(pat=".", repl="_")
 
+bike_orderlines_wrangle_df = df
 
+# %%
 # 6.0 Visualizing a Time Series ----
 
 
@@ -154,4 +205,6 @@ bikes_df
 #   - Run Automatic Forecasting for One or More Time Series
 #   - Store Forecast in Database
 #   - Retrieve Forecasts and Report using Templates
+
+
 # %%
