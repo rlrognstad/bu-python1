@@ -1,0 +1,28 @@
+{
+    "workbench.editorAssociations": [
+        {
+            "viewType": "jupyter.notebook.ipynb",
+            "filenamePattern": "*.ipynb"
+        }
+    ],
+    "git.autofetch": true,
+    "editor.fontLigatures": null,
+    "git.confirmSync": false,
+    "debug.console.fontSize": 14,
+    "workbench.iconTheme": "material-icon-theme",
+    "editor.suggestSelection": "first",
+    "vsintellicode.modify.editor.suggestSelection": "automaticallyOverrodeDefaultValue",
+    "files.associations": {
+        "*.rmd": "markdown"
+    },
+    "r.bracketedPaste": true,
+    "r.sessionWatcher": true,
+    "editor.wordWrap": "on",
+    "r.rterm.windows": "C:\\\\Users\\\\mdanc\\\\Anaconda3\\\\Scripts\\\\radian.exe",
+    "editor.fontSize": 15,
+    "window.zoomLevel": 0.65,
+    "terminal.integrated.fontSize": 15,
+    "markdown-pdf.format": "Letter",
+    "markdown-pdf.outputDirectoryRelativePathFile": true,
+    "python.languageServer": "Pylance"
+}
