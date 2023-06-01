@@ -7,6 +7,9 @@
 
 # 1.0 Load Libraries ----
 
+# # Load Libraries
+# %%
+
 # Core Python Data Analysis
 import pandas as pd
 import numpy as np
@@ -27,20 +30,41 @@ from mizani.breaks import date_breaks
 from mizani.formatters import date_format, currency_format
 
 # Misc
+from os import mkdir, getcwd
+from rich import pretty
+pretty.install()
 
 
 
 # 2.0 Importing Data Files ----
-
+# %%
 # help(pd.read_excel)
 # - Use "q" to quit
+#getcwd()
 
+bikes_df = pd.read_excel("00_data_raw/bikes.xlsx")
+bikes_df
 
+bikeshops_df = pd.read_excel("00_data_raw/bikeshops.xlsx")
 
+orderlines_df = pd.read_excel(
+    io="00_data_raw/orderlines.xlsx",
+    converters={'order.date': str})
+orderlines_df.info()
+
+# %%
 
 
 # 3.0 Examining Data ----
 
+# %%
+bikes_df.head()
+orderlines_df
+
+# %%
+bikes_df
+
+# %%
 
 
 # 4.0 Joining Data ----
@@ -130,3 +154,4 @@ from mizani.formatters import date_format, currency_format
 #   - Run Automatic Forecasting for One or More Time Series
 #   - Store Forecast in Database
 #   - Retrieve Forecasts and Report using Templates
+# %%
