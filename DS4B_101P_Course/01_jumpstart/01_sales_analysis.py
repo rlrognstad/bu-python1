@@ -23,7 +23,8 @@ from plotnine import (
     geom_smooth,
     facet_wrap,
     scale_y_continuous, scale_x_continuous,
-    labs, theme, theme_minimal, theme_matplotlib
+    labs, theme, theme_minimal, theme_matplotlib,
+    expand_limits
 )
 
 from mizani.breaks import date_breaks
@@ -157,17 +158,38 @@ bike_orderlines_wrangle_df = df
 
 # %%
 # 6.0 Visualizing a Time Series ----
+#mkdir("00_data_wrangled")
+bike_orderlines_wrangle_df.to_pickle("00_data_wrangled/bike_orderlines_wrangled_df.pkl")
 
+df = pd.read_pickle("00_data_wrangled/bike_orderlines_wrangled_df.pkl")
 
 # 6.1 Total Sales by Month ----
 
+df['order_date'].dt.year
+
+sales_by_month_df = df[['order_date', 'total_price']] \
+    .set_index('order_date') \
+    .resample(rule='MS') \
+    .aggregate(np.sum) \
+    .reset_index()
 
 # Quick Plot ----
-
+sales_by_month_df.plot(x='order_date', y='total_price')
+plt.show()
 
 # Report Plot ----
+# %%
+usd = currency_format(prefix="$", digits=0, big_mark=",")
 
-
+ggplot(aes(x='order_date', y='total_price'), data=sales_by_month_df) + \
+    geom_line() + \
+    geom_smooth(method='lowess', se=False, color='blue', span =0.18 ) + \
+    scale_y_continuous(labels=usd) + \
+    labs(title = 'Revenue by Month',
+         x ="",
+         y="Revenue") + \
+    theme_minimal() + \
+    expand_limits(y=0)
 
 # 6.2 Sales by Year and Category 2 ----
 
