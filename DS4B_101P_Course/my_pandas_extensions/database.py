@@ -1,10 +1,7 @@
-# DS4B 101-P: PYTHON FOR DATA SCIENCE AUTOMATION ----
-# SQL DATABASES (Module 2): Working with SQLAlchemy ----
-
 # IMPORTS ----
 import sqlalchemy as sql
 import pandas as pd
-# FUNCTION DEFINITION ----
+# COLLECT DATA ----
 def collect_data(
     conn_string= "sqlite:///00_database/bike_orders_database.sqlite"
     ):
