@@ -2,65 +2,104 @@
 # Week 2 (Data Wrangling): Data Wrangling ----
 
 # IMPORTS
+import pandas as pd 
+import numpy as np
+import matplotlib.pyplot as plt
 
-
-
+from my_pandas_extensions.database import collect_data
 # DATA
-
-
-
+df = collect_data()
 # 1.0 SELECTING COLUMNS
 
 # Select by name
-
+df[['order_date', 'order_id', 'order_line']]
 
 # Select by position
-
+df.iloc[:,0:3]
+df.iloc[:, -3:]
 
 # Select by text matching
-
-
+df.filter(regex="(^model)|(^cat)", axis=1)
+df.filter(regex="price$", axis=1)
 # Rearranging columns
+l = df.columns.tolist()
+l.remove('model')
+df[['model', *l]]
 
+l = df.columns.tolist()
+l.remove('model')
+l.remove('category_1')
+l.remove('category_2')
+
+df[['model', 'category_1', 'category_2', *l]]
+
+# List comprehension
+l =df.columns.tolist()
+cols_to_front = ['model', 'category_1', 'category_2']
+
+l2 = [col for col in l if col not in cols_to_front]
+
+df[[*cols_to_front, *l2]]
 
 # Select by data types
+df.info()
+df1 =df.select_dtypes(include=object)
+df2 = df.select_dtypes(exclude=object)
 
+pd.concat([df1, df2], axis=1)
 
 # Dropping Columns (De-selecting)
-
+df.drop(['model', 'category_1'], axis=1)
 
 
 # 2.0 ARRANGING ROWS ----
+df.sort_values('total_price', ascending=False)
 
-
+df.price.sort_values()
 
 
 # 3.0 FILTERING  ----
 
 # Simpler Filters
+df[df.order_date.dt.year >= 2015]
 
+df[df.model == "Trigger Carbon 1"]
+
+df[df.model.str.startswith("Trigger")]
+df[df.model.str.contains("Carbon")]
 
 # Query
-
+price_threshold_1 = 9000
+price_threshold_2 = 1000
+df.query("(price >= @price_threshold_1) | (price <= @price_threshold_2)")
 
 # Filtering Items in a List
-
+df['category_2'].unique()
+df['category_2'].value_counts()
+df[df['category_2'].isin(['Triathalon', 'Triathalon'])]
+df[~df['category_2'].isin(['Triathalon', 'Triathalon'])]
 
 # Slicing
-
+df[0:5]
+df.tail(5)
 
 # Index Slicing
+df.iloc[0:5, [1,3,5]]
 
 
 # Unique / Distinct Values
+df[['category_1', 'category_2', 'frame_material']].drop_duplicates()
 
+df.model.unique()
 
 # Top / Bottom
-
+df.nlargest(n=20, columns='total_price')
+df.nsmallest(n=20, columns='total_price')
+df.total_price.nlargest(n=20)
 
 # Sampling Rows
-
-
+df.sample(n=10, random_state=123)
+df.sample(frac=.10, random_state=123)
 
 # 4.0 ADDING CALCULATED COLUMNS (MUTATING) ----
 
