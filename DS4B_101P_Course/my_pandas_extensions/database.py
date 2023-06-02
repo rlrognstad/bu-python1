@@ -52,6 +52,6 @@ def collect_data(
         'city', 'state']
 
     joined_df = joined_df[cols_to_keep_list]
-    joined_df.columns = joined_df.columns.str.replace(".", "_")
+    joined_df.columns = joined_df.columns.str.replace(".", "_", regex=False)
     
     return joined_df
